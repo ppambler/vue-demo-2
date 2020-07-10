@@ -31,9 +31,31 @@ export default {
     console.log(document.getElementById("app")); // -> null
     console.log(document.getElementById("app1")); // -> div#app1
   },
+  beforeUpdate() {
+    console.log("5-beforeUpdate");
+    console.log("user click button +1");
+    console.log(this.n); // 67
+    console.log(document.getElementsByClassName("demo")[0].innerText); // 66 +1
+  },
+  updated() {
+    console.log("6-updated");
+    console.log(this.n); // 67
+    console.log(document.getElementsByClassName("demo")[0].innerText); // 67 +1
+  },
+  beforeDestroy() {
+    console.log("7-beforeDestroy");
+    console.log(this.n); // -> 还能拿到n值
+    console.log(document.getElementsByClassName("demo")[0].innerText); // 此时视图已经在页面中消失了
+  },
+  destroyed() {
+    console.log("8-destroyed");
+    console.log(this.n); //还能拿到n值
+    console.log(document.getElementsByClassName("demo")[0].innerText); // 此时视图已经在页面中消失了
+  },
   methods: {
     add() {
       this.n++;
+      console.log("user click button call add method");
     },
     setN(n) {
       this.n = n;
