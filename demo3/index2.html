@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index2</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">{{n}}</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    // new Vue({
+    //   el: '#app',
+    //   data: {}
+    // })
+    new Vue({
+      data: {
+        obj: {
+          a: 0,// obj.a 会被 Vue 监听 & 代理
+        }
+      },
+      template: `
+    <div>
+      {{obj.b}}
+      <button @click="setB">set b</button>
+    </div>
+  `,
+      methods: {
+        setB() {
+          // this.obj.b = 1; //请问，页面中会显示 1 吗？
+
+          // 这 set === $set -> true
+          Vue.set(this.obj, 'b', 1)
+
+          // 为啥加个「$」？ -> 因为万一 data 旗下有个 set 属性呢？所以为了避嫌就只好加个 $ 了
+          // this.$set(this.obj, 'b', 1)
+        }
+      }
+    }).$mount("#app");
+  </script>
+</body>
+
+</html>

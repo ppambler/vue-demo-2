@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index3</title>
+  <style>
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <p v-color-swatch="'lightcoral'">Hello World!</p>
+    <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.directive('demo', function (el, binding) {
+      console.log(binding.value.color) // => "white"
+      console.log(binding.value.text)  // => "hello!"
+    })
+
+
+    Vue.directive('color-swatch', function (el, binding) {
+      console.log(el)
+      el.style.color = binding.value
+    })
+    new Vue({
+      el: '#app',
+    })
+  </script>
+</body>
+
+</html>

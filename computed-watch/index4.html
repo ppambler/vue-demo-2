@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index4</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="changeGender('')">全部</button>
+    <button @click="changeGender('男')">男</button>
+    <button @click="changeGender('女')">女</button>
+    <ul>
+      <li v-for="(item,key) in displayName">{{item.name}}--{{item.sex}}</li>
+    </ul>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    let createUser = (name, age, sex) => {
+      return { name, age, sex };
+    };
+    let vm = new Vue({
+      el: '#app',
+      data() {
+        return {
+          users: [
+            createUser("frank", 18, "男"),
+            createUser("lucy", 20, "女"),
+            createUser("tom", 19, "男"),
+            createUser("sandy", 16, "女")
+          ],
+          gender: ""
+        };
+      },
+      computed: {
+        displayName() {
+          let gender = this.gender;
+          let users = this.users;
+          let genderObj = {
+            man: "男",
+            women: "女"
+          };
+
+          if (gender === "") {
+            return users;
+          } else {
+            return users.filter(item => {
+              return item.sex === genderObj[gender];
+            });
+          }
+        }
+      },
+      methods: {
+        changeGender(string) {
+          if (string) {
+            string = string === "男" ? "man" : "women";
+          }
+          this.gender = string;
+        }
+      }
+    })
+
+
+
+  </script>
+</body>
+
+</html>

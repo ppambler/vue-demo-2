@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index1</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+
+  </div>
+
+  <div id="car"></div>
+
+  <div id="status"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0-0/axios.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+  <script>
+    const baseUrl = '/mvc/books/1'
+    const preUrl = '/mvc/books/'
+    // 模拟后端路由！
+    axios.interceptors.response.use(response => {
+      let { config: { url, method, data, headers } } = response
+      data = JSON.parse(data || '{}')
+      let row = {
+        id: 1, name: 'JavaScript高级程序设计', number: 2
+      }
+      if (url === baseUrl && method === 'get' && !headers['Content-Type']) {
+        console.log('get')
+        response.data = row
+        console.log(response.data)
+      } else if (url === baseUrl && method === 'get' && headers['Content-Type']) {
+        console.log('put')
+        console.log(data)
+        response.data = Object.assign(row, data)
+      }
+      return response
+    })
+
+    class EventHub {
+      constructor() {
+        this.events = {}
+      }
+      on(eventName, fn) {
+        if (!this.events[eventName]) {
+          this.events[eventName] = []
+        }
+        this.events[eventName].push(fn)
+      }
+      emit(eventName, params) {
+        let fnList = this.events[eventName]
+        fnList.map((fn) => {
+          fn.apply(null, params)
+        })
+      }
+      off(eventName, fn) {
+        let fnList = this.events[eventName]
+        for (let i = 0; i < fnList.length; i++) {
+          if (fnList[i] === fn) {
+            delete fnList[i]
+            break
+          }
+        }
+      }
+    }
+
+
+    class Model extends EventHub {
+      constructor(options) {
+        super()
+        this.data = options.data || {}
+        this.resource = options.resource
+        this.baseUrl = options.baseUrl || '/'
+      }
+      fetch(id) {
+        return axios.get(this.baseUrl + this.resource + 's/' + id)
+          .then(({ data }) => { this.data = data; this.emit('changed') })
+      }
+      create(data) {
+        return axios.post(this.baseUrl + this.resource + 's', data)
+          .then(({ data }) => { this.data = data; this.emit('changed') })
+      }
+      destroy() {
+        let id = this.data.id
+        return axios.delete(this.baseUrl + this.resource + 's/' + id)
+          .then(() => { this.data = {}; this.emit('changed') })
+      }
+      update(newData) {
+        let id = this.data.id
+        return axios({ method: 'get', url: this.baseUrl + this.resource + 's/' + id, data: newData })
+          .then(({ data }) => {
+            this.data = data;
+            this.emit('changed')
+          })
+      }
+    }
+
+    var model = new Model({
+      resource: 'book',
+      baseUrl: '/mvc/',
+      data: {
+        id: null,
+        number: 0,
+        name: null
+      }
+    })
+
+    var view = new Vue({
+      el: '#app',
+      data: {
+        name: '未命名',
+        number: 0,
+        n: 1
+      },
+      template: `
+      <div>
+        <div>
+          书名：《{{name}}》，
+          数量：{{number}}
+        </div>
+        <div><input v-model="n"></div>
+        <div class="actions">
+          <button v-on:click="add">加N</button>
+          <button v-on:click="minus">减N</button>
+          <button v-on:click="square">平方</button>
+          <button v-on:click="cube">立方</button>
+          <button v-on:click="reset">归零</button>
+        </div>  
+      </div>
+          `,
+      methods: {
+        add() {
+          let newData = { number: this.number + (this.n - 0) }
+          this.updateModel(newData)
+        },
+        minus() {
+          let newData = { number: this.number - (this.n - 0) }
+          this.updateModel(newData)
+        },
+        square() {
+          let newData = { number: Math.pow(this.number, 2) }
+          this.updateModel(newData)
+        },
+        cube() {
+          let newData = { number: Math.pow(this.number, 3) }
+          this.updateModel(newData)
+        },
+        reset() {
+          this.updateModel({ number: 0 })
+        },
+        updateModel(newData) {
+          model.update(newData)
+        }
+      }
+    })
+
+    model.on('changed', () => {
+      console.log('c')
+      view.name = model.data.name
+      view.number = model.data.number
+    })
+    model.fetch(1)
+
+
+  </script>
+</body>
+
+</html>

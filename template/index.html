@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+    <div v-text="msg"></div>
+    <div v-text="msg1"></div>
+    <div v-pre>{{ n }}</div>
+    <div :style="style1">hi</div>
+    <div v-if="x>0">x大于0</div>
+    <div v-else-if="x===0">x等于0</div>
+    <div v-else>x小于0</div>
+    <div v-show="n%2===0"> n 是偶数</div>
+    <div v-show="n%2===1"> n 是奇数</div>
+    <div :style="{display:n%2===0?'block':'none'}"> n 是偶数 </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        msg: 'hi',
+        msg1: '<div style="color:yellow">hi</div>',
+        n: 'Hello',
+        style1: "border:'1px solid red',height:'100px'",
+        x: 6,
+        n: 8
+      }
+    })
+  </script>
+</body>
+
+</html>

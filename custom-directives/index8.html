@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index8</title>
+  <style>
+    .red {
+      width: 100px;
+      height: 100px;
+      border: 3px solid lightcoral;
+    }
+
+    .green {
+      width: 100px;
+      height: 100px;
+      border: 3px solid lightgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      <button @click="Child1isShow=false">child1消失</button>
+      <child1 v-if="Child1isShow"></child1>
+    </div>
+    <br />
+    <div>
+      <button @click="Child2isShow=false">child2消失</button>
+      <child2 v-if="Child2isShow"></child2>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const log = {
+      data() {
+        return {
+          name: undefined,
+          time: undefined
+        };
+      },
+      created() {
+        if (!this.name) {
+          throw new Error("need Name")
+        }
+        this.time = new Date();
+        console.log(`${this.name}出生了`)
+      },
+      beforeDestroy() {
+        const now = new Date() - this.time;
+        console.log(`${this.name}死亡了，共存活了 ${now} ms`);
+      }
+    }
+    // MyVue是一个组件实例哈！
+    const MyVue = Vue.extend({
+      mixins: [log]
+      // data() {
+      //   return {
+      //     name: '',
+      //     time: undefined
+      //   }
+      // },
+      // created() {
+      //   if (!this.name) { console.error('no name!') }
+      //   this.time = new Date();
+      //   console.log(`${this.name}出生了`)
+      // },
+      // beforeDestroy() {
+      //   const duration = (new Date()) - this.time
+      //   console.log(`${this.name}存活时间${duration}ms`)
+      // }
+    })
+    Vue.component('child1', {
+      data() {
+        return {
+          name: 'child1'
+        }
+      },
+      template: `
+      <div class="red">Child1消失</div>
+      `,
+      extends: MyVue
+    })
+    Vue.component('child2', {
+      data() {
+        return {
+          name: 'child2'
+        }
+      },
+      template: `
+     <div class="green">Child2消失</div>
+      `,
+      extends: MyVue
+    })
+
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          Child1isShow: true,
+          Child2isShow: true,
+        };
+      },
+    })
+
+
+    // let child1 = new MyVue({
+    //   data() {
+    //     return {
+    //       name: 'child1'
+    //     }
+    //   },
+    //   template: `
+    //   <div class="red">Child1消失</div>
+    //   `
+    // })
+    // let child2 = new MyVue({
+    //   data() {
+    //     return {
+    //       name: 'child2'
+    //     }
+    //   },
+    //   template: `
+    //   <div class="red">Child2消失</div>
+    //   `
+    // })
+    // new Vue({
+    //   el: '#app',
+    //   components: {
+    //     child1,
+    //     child2
+    //   },
+    //   data() {
+    //     return {
+    //       Child1isShow: true,
+    //       Child2isShow: true,
+    //     };
+    //   },
+    // })
+  </script>
+</body>
+
+</html>

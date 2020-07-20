@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index6</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+
+  </div>
+  <div class="xxx">
+    <button @click="hi()">btn</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '.xxx',
+      methods: {
+        hi() {
+          console.log("m");
+        }
+      }
+    })
+    // 自定义v-on2指令
+    new Vue({
+      el: "#app",
+      directives: {
+        on2: {
+          // binding 是一个对象，包含指令的很多信息
+          inserted(el, binding) {
+            console.log('hi')
+            el.addEventListener(binding.arg, binding.value)
+          },
+          unbind(el, binding) {
+            el.removeEventListener(binding.arg, binding.value)
+          }
+        }
+      },
+      template: `
+            <button v-on2:click="hi()">点我</button>
+        `,
+      methods: {
+        hi() {
+          console.log("m");
+        }
+      }
+    })
+
+  </script>
+</body>
+
+</html>

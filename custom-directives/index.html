@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+    <input v-focus>
+    <button v-t-click>btn</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    // Register a global custom directive called `v-focus`
+    Vue.directive('focus', {
+      // When the bound element is inserted into the DOM...
+      inserted: function (el) {
+        // Focus the element
+        console.dir(el)
+        el.focus()
+      }
+    })
+    Vue.directive('t-click', {
+      // When the bound element is inserted into the DOM...
+      inserted: function (el) {
+        // Focus the element
+        console.dir(el)
+        el.onclick = () => {
+          alert('t-click')
+        }
+      }
+    })
+    let vm = new Vue({
+      el: '#app'
+    })
+  </script>
+</body>
+
+</html>

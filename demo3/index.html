@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index</title>
+  <style></style>
+</head>
+
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- <script src="./index.js"></script> -->
+  <script src="data.js"></script>
+  <script>
+    const myData = {
+      n: 0
+    }
+    console.log(myData) // -> key point
+    const vm = new Vue({
+      data: myData,
+      template: `
+        <div> {{n}} <button @click="add">+10</button></div>
+      `,
+      methods: {
+        add() {
+          // this.n += 10 // -> 平时会这样改n，而不是下边这种，因为我们不会全局声明一个myData，然后赋值给vm内部的data，但为了测试效果，所以选择了下边这种
+          myData.n += 10
+        }
+      }
+    }).$mount("#app")
+
+    setTimeout(() => {
+      myData.n = 10
+      console.log(myData) // -> key point
+      console.log(vm)
+      console.log(vm.$data === myData) // -> true
+    }, 3000)
+  </script>
+</body>
+
+</html>

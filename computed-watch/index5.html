@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index5</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+    {{n}}
+    <br />
+    <button @click="add1">+1</button>
+    <button @click="add2">+2</button>
+    <button @click="minus1">-1</button>
+    <button @click="minus2">-2</button>
+    <br />
+    <button @click="undo">undo</button>
+    <br />
+    {{history}}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          n: 0,
+          history: [],
+          isUndoMode: false
+        }
+      },
+      watch: {  // watch是异步操作  
+        n(newV, oldV) { // newV是n数据更新后的新值,oldV是n数据未更新的旧值  
+          if (!this.isUndoMode) {
+            this.history.push({ form: newV, to: oldV });
+          }
+        }
+      },
+      methods: {
+        add1() { this.n += 1 },
+        add2() { this.n += 2 },
+        minus1() { this.n -= 1 },
+        minus2() { this.n -= 2 },
+        undo() {
+          const last = this.history.pop();
+          const old = last.from;
+          this.isUndoMode = true;
+          this.n = old;   // 一更新n的值马上又会触发n的函数  
+          this.$nextTick(() => {
+            this.isUndoMode = false;
+          }, 0);
+        }
+      }
+    }
+
+    )
+  </script>
+</body>
+
+</html>

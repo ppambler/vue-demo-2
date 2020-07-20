@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index6</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    //     new Vue({
+    //       data: {
+    //         user: {
+    //           email: "renshisan@qq.com",
+    //           nickname: "荏狸十三",
+    //           phone: "13800002245"
+    //         }
+    //       },
+    //       template: `
+    // 		<div>
+    // 			{{user.nickname || user.email || user.phone}}
+    // 		</div>
+    // `
+    //     }).$mount('#app');
+
+    let vm = new Vue({
+      data: {
+        user: {
+          email: "renshisan@qq.com",
+          nickname: "荏狸十三",
+          phone: "13800002245"
+        }
+      },
+      computed: {
+        displayName: {
+          get() {
+            const user = this.user;
+            return user.nickname || user.email || user.phone;
+          },
+          set(value) {
+            this.user.nickname = value;
+          }
+        }
+      },
+      template: `
+		<div>
+			{{displayName}}
+		</div>
+`
+    }).$mount('#app');
+  </script>
+</body>
+
+</html>

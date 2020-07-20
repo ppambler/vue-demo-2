@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index7</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    let vm = new Vue({
+      data: {
+        n: 0,
+        obj: {
+          a: "a"
+        }
+      },
+      template: `
+    <div>
+      <button @click="n += 1">n+1</button>
+      <button @click="obj.a += 'hi'">obj.a + 'hi'</button>
+      <button @click="obj = {a:'a'}">obj = 新对象</button>
+    </div>
+  `,
+      watch: {
+        n: () => {
+          console.log(this)
+          console.log("n 变了");
+        },
+        obj() {
+          console.log("obj 变了");
+        },
+        "obj.a": function () {
+          console.log("obj.a 变了");
+        }
+      }
+    }).$mount("#app");
+  </script>
+</body>
+
+</html>

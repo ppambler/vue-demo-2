@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index2</title>
+  <style>
+    .green {
+      border: 3px solid lightgreen;
+    }
+
+    .red {
+      border: 3px solid lightcoral;
+      padding: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="red">
+    Father 还有{{total}}
+    <child :money="total" v-on:update:money="fn"></child>
+    <!-- v-on:update:money="fn" <=> v-on:update:money="total=$event" -->
+    <!-- 上面 v-on:update:money="fn" 等价于 :money.sync="total" -->
+
+    <child :money.sync="total"></child>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('child', {
+      template: `
+        <div class="green">
+        <button @click="$emit('update:money',money-100)">花钱</button>
+        <span>{{money}}</span>
+      </div>
+      `,
+      props: ["money"]
+    })
+
+    let vm = new Vue({
+      el: '.red',
+      data() {
+        return {
+          total: 10000
+        };
+      },
+      methods: {
+        fn(event) {
+          // event 是子组件传递过来的值，天生就存在
+          console.log(event)
+          this.total = event;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

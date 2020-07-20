@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index9</title>
+  <style>
+    .app.theme-lightgreen button {
+      background: lightgreen;
+      color: white;
+    }
+
+    .app.theme-lightgreen {
+      color: darkcyan;
+    }
+
+    .app.theme-lightcoral button {
+      background: lightcoral;
+      color: white;
+    }
+
+    .app.theme-lightcoral {
+      color: darksalmon;
+    }
+
+    .app.fontSize-normal {
+      font-size: 16px;
+    }
+
+    .app button {
+      font-size: inherit;
+    }
+
+    .app.fontSize-small {
+      font-size: 12px;
+    }
+
+    .app.fontSize-big {
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="xxx" :class="`app theme-${themeName} fontSize-${fontSizeName}`">
+    <change-button>换肤</change-button>
+    <br>
+    <button>🟡</button>
+    <button>🟡</button>
+    <button>🟡</button>
+    <button>🟡</button>
+    <button>🟡</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('change-button', {
+      data() {
+        return {}
+      },
+      template: `
+        <div>
+          <button @click="changeTheme">换肤</button>
+          <button @click="changeFontSize('big')">大字</button>
+          <button @click="changeFontSize('small')">小字</button>
+          <button @click="changeFontSize('normal')">正常字</button>
+        </div>
+      `,
+      inject: ["themeName", "changeTheme", "changeFontSize"]
+
+    })
+    new Vue({
+      el: '#xxx',
+      provide() {
+        return {
+          themeName: this.themeName,
+          fontSizeName: this.fontSizeName,
+          changeTheme: this.changeTheme,
+          changeFontSize: this.changeFontSize
+        }
+      },
+      data() {
+        return {
+          themeName: 'lightcoral', // 'lightgreen'
+          fontSizeName: 'normal' // 'big' or 'small'
+        }
+      },
+      methods: {
+        changeTheme() {
+          if (this.themeName === 'lightcoral') {
+            this.themeName = 'lightgreen'
+          } else {
+            this.themeName = 'lightcoral'
+          }
+        },
+        changeFontSize(size) {
+          if (["normal", "big", "small"].indexOf(size) === -1) {
+            throw new Error(`no size: ${size}`)
+          }
+          this.fontSizeName = size
+        }
+      }
+    })
+
+
+  </script>
+</body>
+
+</html>

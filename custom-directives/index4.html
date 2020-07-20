@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index4</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var mixin = {
+      data: function () {
+        return {
+          message: 'hello',
+          mix: 'abc'
+        }
+      },
+      created: function () {
+        console.log('混入对象的钩子被调用')
+      },
+      methods: {
+        foo: function () {
+          console.log('foo')
+        },
+        conflicting: function () {
+          console.log('from mixin')
+        }
+      }
+    }
+
+    var vm = new Vue({
+      el: '#app',
+      mixins: [mixin],
+      data: function () {
+        return {
+          message: 'goodbye',
+          com: 'def'
+        }
+      },
+      created: function () {
+        console.log('组件钩子被调用')
+      },
+      methods: {
+        bar: function () {
+          console.log('bar')
+        },
+        conflicting: function () {
+          console.log('from self')
+        }
+      }
+    })
+    console.log(vm.message, vm.mix, vm.com)
+    vm.foo() // => "foo"
+    vm.bar() // => "bar"
+    vm.conflicting() // => "from self"
+  </script>
+</body>
+
+</html>
