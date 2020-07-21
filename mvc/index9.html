@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index9</title>
+  <style></style>
+</head>
+
+<body>
+  <script>
+    // var data = {}
+    // function render() { }
+    // var _name = 'xxx'
+    // Object.defineProperty(data, 'name', {
+    //   get() { return _name },
+    //   set(value) {
+    //     _name = value;
+    //     console.log('更新 input');
+    //     render()
+    //   }
+    // })
+
+    var data = {
+      name: 'xxx'
+    }
+    var dataProxy = new Proxy(data, {
+      get(target, key) {
+        return data[key]
+      },
+      set(target, key, value) {
+        if (key === 'name') {
+          data.name = value
+          console.log('更新 UI')
+        } else {
+          data[key] = value
+          console.log('更新 UI')
+        }
+      }
+    })
+    console.log(dataProxy.name)
+    console.log(data)
+    dataProxy.name = 'hhh'
+    dataProxy.age = 18
+    dataProxy.age = 20
+    console.log(data)
+
+  </script>
+</body>
+
+</html>

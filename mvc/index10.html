@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index1</title>
+  <style></style>
+</head>
+
+<body>
+  <div id="app">
+
+  </div>
+
+  <div id="car"></div>
+
+  <div id="status"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0-0/axios.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/react/16.13.1/umd/react.development.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/16.13.1/umd/react-dom.development.min.js"></script>
+  <script src="./tem.js" type="text/jsx"></script>
+  <script>
+    const baseUrl = '/mvc/books/1'
+    const preUrl = '/mvc/books/'
+    // 模拟后端路由！
+    axios.interceptors.response.use(response => {
+      let { config: { url, method, data, headers } } = response
+      data = JSON.parse(data || '{}')
+      let row = {
+        id: 1, name: 'JavaScript高级程序设计', number: 2
+      }
+      if (url === baseUrl && method === 'get' && !headers['Content-Type']) {
+        console.log('get')
+        response.data = row
+        console.log(response.data)
+      } else if (url === baseUrl && method === 'get' && headers['Content-Type']) {
+        console.log('put')
+        console.log(data)
+        response.data = Object.assign(row, data)
+      }
+      return response
+    })
+
+    class Model {
+      constructor(options) {
+        this.resource = options.resource
+        this.baseUrl = options.baseUrl || '/'
+      }
+      fetch(id) {
+        return axios.get(this.baseUrl + this.resource + 's/' + id)
+
+      }
+      create(data) {
+        return axios.post(this.baseUrl + this.resource + 's', data)
+      }
+      destroy(id) {
+        return axios.delete(this.baseUrl + this.resource + 's/' + id)
+      }
+      update(id, newData) {
+        return axios({ method: 'get', url: this.baseUrl + this.resource + 's/' + id, data: newData })
+      }
+    }
+
+    var model = new Model({
+      resource: 'book',
+      baseUrl: '/mvc/'
+    })
+    class BookCard extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          // 用户数据
+          book: {
+            id: null,
+            name: '',
+            number: 0
+          },
+          // UI 数据 -> 临时数据
+          n: 1
+        }
+      }
+      componentDidMount() {
+        model.fetch(1).then((response) => {
+          this.setState({
+            book: response.data
+          })
+        })
+      }
+      render() {
+        return (
+          <div>
+            <div>
+              书名：《{this.state.book.name}》，
+          数量：{this.state.book.number}
+            </div>
+            <div>
+              <input value={this.state.n} onChange={this.changeN} />
+            </div>
+            <div className="actions">
+              <button onClick={this.add.bind(this)}>加N</button>
+              <button onClick={this.minus.bind(this)}>减N</button>
+              <button onClick={this.square.bind(this)}>平方</button>
+              <button onClick={this.cube.bind(this)}>立方</button>
+              <button onClick={this.reset.bind(this)}>归零</button>
+            </div>
+          </div>
+        )
+      }
+      changeN(e) {
+        console.log(e)
+        this.setState({
+          n: this.state.n
+        })
+      }
+      add() {
+        const newData = {
+          number: this.state.book.number + this.state.n
+        }
+        model.update(this.state.book.id, newData)
+          .then((response) => {
+            this.setState({ book: response.data })
+          })
+      }
+      minus() {
+        const newData = {
+          number: this.state.book.number - this.state.n
+        }
+        model.update(this.state.book.id, newData)
+          .then((response) => {
+            this.setState({ book: response.data })
+          })
+      }
+      square() {
+        const newData = {
+          number: Math.pow(this.state.book.number, 2)
+        }
+        model.update(this.state.book.id, newData)
+          .then((response) => {
+            this.setState({ book: response.data })
+          })
+      }
+      cube() {
+        const newData = {
+          number: Math.pow(this.state.book.number, 3)
+        }
+        model.update(this.state.book.id, newData)
+          .then((response) => {
+            this.setState({ book: response.data })
+          })
+      }
+      reset() {
+        const newData = {
+          number: 0
+        }
+        model.update(this.state.book.id, newData)
+          .then((response) => {
+            this.setState({ book: response.data })
+          })
+      }
+    }
+
+    var view = <BookCard />;
+
+    ReactDOM.render(
+      view,
+      document.getElementById('app')
+    );
+
+  </script>
+</body>
+
+</html>
