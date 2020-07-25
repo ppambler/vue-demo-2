@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index</title>
+  <style></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-model="msg1">
+    <hr>
+    {{msg1}}
+    <hr style="border: 2px solid lightcoral;">
+    <input type="text" :value="msg2" @input="msg2 = $event.target.value">
+    <hr>
+    {{msg2}}
+    <hr style="border: 2px solid lightcoral;">
+    <span contenteditable @input="msg2 = $event.target.innerText">
+      {{msg2}}
+    </span>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        msg1: 'Hello',
+        msg2: 'World',
+        msg3: '!'
+      }
+    })
+  </script>
+</body>
+
+</html>

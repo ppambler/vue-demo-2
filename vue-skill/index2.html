@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index2</title>
+  <style></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    Father value: {{value}}
+    <div style="border: 1px solid lightcoral">
+      <child :selected="value"></child>
+    </div>
+  </div>
+
+  <script>
+    Vue.component('child', {
+      props: ['selected'],
+      template: `
+        <div>
+          selected: {{selected}}
+          <hr>
+          <button @click="selected=selected.name = 'son'">1</button>
+          <button @click="selected=2">2</button>
+        </div>
+      `
+    })
+    let vm = new Vue({
+      el: '#app',
+      data: {
+        value: { name: 'father' }
+      }
+    })
+  </script>
+</body>
+
+</html>

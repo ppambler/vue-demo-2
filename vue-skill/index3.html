@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index3</title>
+  <style>
+    .active {
+      background: lightcoral;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        selectedTab: 1
+      },
+      template: `
+        <div class="tabs">
+          <ol class="navs">
+            <li :class="{active:selectedTab === 1}" @click="selectedTab = 1">1</li>
+            <li :class="{active:selectedTab === 2}" @click="selectedTab = 2">2</li>
+          </ol>
+          <div class="panes">
+            <li v-show="selectedTab === 1">content 1</li>
+            <li v-show="selectedTab === 2">content 2</li>
+          </div>
+        </div>
+      `
+    })
+  </script>
+</body>
+
+</html>

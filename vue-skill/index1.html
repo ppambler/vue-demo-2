@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index1</title>
+  <style></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="handler(1,$event)">button</button>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      methods: {
+        handler(arg1, xx) {
+          console.log(arg1)
+          console.log(xx)
+          console.log(event)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
