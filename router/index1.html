@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index1</title>
+  <style></style>
+</head>
+
+<body>
+  <a href="#1">go to 1</a>
+  <a href="#2">go to 2</a>
+  <a href="#3">go to 3</a>
+  <a href="#4">go to 4</a>
+  <div id="app"></div>
+  <div id="div1" style="display: none;">1</div>
+  <div id="div2" style="display: none;">2</div>
+  <div id="div3" style="display: none;">3</div>
+  <div id="div4" style="display: none;">4</div>
+  <script>
+    let number = window.location.hash.substr(1)
+    console.log(number)
+
+    // 获取界面
+    let div = document.querySelector(`#div${number}`)
+    let app = document.querySelector('#app')
+
+    if (div) {
+      // 渲染界面
+      div.style.display = "block"
+      // 展示界面
+      app.appendChild(div)
+    }
+
+    window.addEventListener('hashchange', () => {
+      console.log('hash 变了')
+
+      number = window.location.hash.substr(1)
+      console.log(number)
+
+      // 获取界面
+      div = document.querySelector(`#div${number}`)
+      app = document.querySelector('#app')
+
+      console.log(div)
+
+      // 渲染界面
+      div.style.display = "block"
+
+      // 展示界面
+      if (app.children[0]) {
+        app.children[0].style.display = "none"
+        document.body.appendChild(app.children[0])
+      } else {
+        div.style.display = "block"
+      }
+
+      app.appendChild(div)
+    })
+  </script>
+</body>
+
+</html>
