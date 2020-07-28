@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>index2</title>
+</head>
+
+<body>
+  <a href="#1">go to 1</a>
+  <a href="#2">go to 2</a>
+  <a href="#3">go to 3</a>
+  <a href="#4">go to 4</a>
+  <div id="app"></div>
+  <div id="div1" style="display: none;">1</div>
+  <div id="div2" style="display: none;">2</div>
+  <div id="div3" style="display: none;">3</div>
+  <div id="div4" style="display: none;">4</div>
+  <div id="div404" style="display: none;">你要找的内容被狗吃了</div>
+  <script>
+    let number = window.location.hash.substr(1)
+    number = number || 1
+
+    // 获取界面
+    let div = document.querySelector(`#div${number}`)
+    let app = document.querySelector('#app')
+
+    if (div) {
+      // 渲染界面
+      div.style.display = "block"
+      // 展示界面
+      app.appendChild(div)
+    } else {
+      div = document.querySelector(`#div404`)
+      div.style.display = 'block'
+      app.appendChild(div)
+    }
+
+    window.addEventListener('hashchange', () => {
+      console.log('hash 变了')
+
+      number = window.location.hash.substr(1)
+      console.log(number)
+
+      // 获取界面
+      div = document.querySelector(`#div${number}`)
+      app = document.querySelector('#app')
+
+      console.log(div)
+      // 切换hash的时候就把 #app 里的东西给清空掉！
+      app.children[0].style.display = "none"
+
+      if (!div) {
+        div = document.querySelector(`#div404`)
+        console.log(div)
+      }
+
+      // 渲染界面
+
+      div.style.display = 'block'
+
+      // 展示界面
+      document.body.appendChild(app.children[0])
+      app.appendChild(div)
+    })
+  </script>
+</body>
+
+</html>
