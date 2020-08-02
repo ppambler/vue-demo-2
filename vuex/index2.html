@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index1</title>
+  <style></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./vuex.js"></script>
+
+</head>
+
+<body>
+  <div id="app">
+    {{n}}
+    <br>
+    <p>mutations：</p>
+    <p>同步 +1 -1：</p>
+    <minus></minus>
+    <plus></plus>
+    <br>
+    <p>1s 后 +1 ：</p>
+    <plus-async></plus-async>
+    <br>
+    <p>actions：</p>
+    <p>1s 后 +1 ：</p>
+    <plus-async-right></plus-async-right>
+    <br>
+    <p>同步 -1，异步 1s 后 -1</p>
+    <minus-two></minus-two>
+  </div>
+
+  <script>
+    Vue.use(Vuex)
+    const mapState = Vuex.mapState
+    const mapMutations = Vuex.mapMutations
+    const mapActions = Vuex.mapActions
+    const store = new Vuex.Store({
+      state: {
+        n: 1,
+        user: {},
+        userGroup: {},
+        products: {},
+        cart: {}
+      },
+      mutations: {
+        plus(state) {
+          state.n++
+        },
+        minus(state) {
+          state.n--
+        },
+        plusAsync(state) {
+          setTimeout(() => {
+            state.n++
+          }, 1000)
+        }
+      },
+      actions: {
+        plus(context) {
+          setTimeout(() => {
+            context.commit('plus')
+          }, 1000)
+        },
+        minusAsync(context) {
+          setTimeout(() => {
+            context.commit('minus')
+          }, 1000)
+        }
+      }
+    })
+
+    const plus = {
+      name: 'Plus',
+      template: `
+        <button @click="plus">{{n}}+1</button>
+      `,
+      computed: mapState(['n']),
+      methods: mapMutations(['plus'])
+    }
+    const plusAsync = {
+      name: 'PlusAsync',
+      template: `
+        <button @click="plusAsync">{{n}}+1</button>
+      `,
+      computed: mapState(['n']),
+      methods: mapMutations(['plusAsync'])
+    }
+    const plusAsyncRight = {
+      name: 'PlusAsyncRight',
+      template: `
+        <button @click="plus">{{n}}+1</button>
+      `,
+      computed: mapState(['n']),
+      methods: mapActions(['plus'])
+    }
+    const minus = {
+      name: 'Minus',
+      template: `
+        <button @click="minus">{{n}}-1</button>
+      `,
+      computed: mapState(['n']),
+      methods: mapMutations(['minus'])
+    }
+    const minusTwo = {
+      name: 'MinusTwo',
+      template: `
+      <div>
+        <button @click="minus">{{n}}-1</button>
+        <button @click="minusAsync">{{n}}-1</button>
+      </div>
+      `,
+      computed: mapState(['n']),
+      methods: { ...mapMutations(['minus']), ...mapActions(['minusAsync']) }
+    }
+
+    const vm = new Vue({
+      el: '#app',
+      components: {
+        minus, plus, plusAsync, plusAsyncRight, minusTwo
+      },
+      store,
+      computed: mapState(['n'])
+    })
+  </script>
+</body>
+
+</html>

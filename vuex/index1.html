@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta charset="utf-8">
+  <title>index1</title>
+  <style></style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="./vuex.js"></script>
+
+</head>
+
+<body>
+  <div id="app">
+    <count />
+  </div>
+
+  <script>
+    Vue.use(Vuex)
+    const mapState = Vuex.mapState
+    const store = new Vuex.Store({
+      state: {
+        count: 0,
+        n: 1,
+        m: 2
+      },
+      mutations: {
+        increment(state) {
+          state.count++
+        }
+      }
+    })
+    console.log(mapState(['n', 'm']))
+    Vue.component('count', {
+      name: 'Count',
+      // state
+      data() {
+        return {
+
+        }
+      },
+      computed: mapState(['n', 'm'])
+      // computed: {
+      //   test() {
+      //     return 'test'
+      //   },
+      //   ...mapState(['count'])
+      // }
+      ,
+      // view
+      template: `
+        <div>{{ count }}{{test}}<button @click="increment">+1</button></div>
+
+      `,
+      // actions
+      methods: {
+        increment() {
+          console.log(this)
+          this.$store.commit('increment')
+          console.log(this.$store.state.count)
+        }
+      }
+    })
+    new Vue({
+      el: '#app',
+      store
+    })
+  </script>
+</body>
+
+</html>
